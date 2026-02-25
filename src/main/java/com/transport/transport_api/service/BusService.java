@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.transport.transport_api.entity.Bus;
+import com.transport.transport_api.exception.ResourceNotFoundException;
 import com.transport.transport_api.repository.BusRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,11 @@ public class BusService {
         return busRepository.findAll();
     }
 
-    public void deleteBus(Long id) {
-        busRepository.deleteById(id);
+   public void deleteBus(Long id) {
+
+        Bus bus = busRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Bus not found with id: " + id));
+
+        busRepository.delete(bus);
     }
 }
