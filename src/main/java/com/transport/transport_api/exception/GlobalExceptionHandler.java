@@ -33,4 +33,8 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.badRequest().body(errors);
     }
+    @ExceptionHandler(SeatAlreadyBookedException.class)
+        public ResponseEntity<String> handleSeatConflict(SeatAlreadyBookedException ex) {
+        return ResponseEntity.status(409).body(ex.getMessage());
+    }
 }
