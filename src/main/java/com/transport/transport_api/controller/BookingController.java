@@ -1,7 +1,9 @@
 package com.transport.transport_api.controller;
+import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,5 +32,15 @@ public class BookingController {
                 .getName();
 
         return bookingService.bookSeat(busId, seatNumber, username);
+    }
+    @GetMapping("/my")
+    public List<Booking> getMyBookings() {
+
+        String username = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        return bookingService.getMyBookings(username);
     }
 }

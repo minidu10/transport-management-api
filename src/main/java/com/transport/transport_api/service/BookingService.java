@@ -1,5 +1,7 @@
 package com.transport.transport_api.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.transport.transport_api.entity.AppUser;
@@ -38,5 +40,12 @@ public class BookingService {
         booking.setSeatNumber(seatNumber);
 
         return bookingRepository.save(booking);
+    }
+    public List<Booking> getMyBookings(String username) {
+
+        AppUser user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return bookingRepository.findByUser(user);
     }
 }
