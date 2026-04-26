@@ -1,5 +1,6 @@
 package com.transport.transport_api.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,5 +28,11 @@ public class AuthController {
     public String login(@RequestParam String username,
                         @RequestParam String password) {
         return authService.login(username, password);
+    }
+
+    @PostMapping("/register-admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String registerAdmin(@RequestBody AppUser user) {
+        return authService.registerAdmin(user);
     }
 }

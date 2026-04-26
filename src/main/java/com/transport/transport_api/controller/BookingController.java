@@ -34,6 +34,7 @@ public class BookingController {
         return bookingService.bookSeat(busId, seatNumber, username);
     }
     @GetMapping("/my")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public List<Booking> getMyBookings() {
 
         String username = SecurityContextHolder

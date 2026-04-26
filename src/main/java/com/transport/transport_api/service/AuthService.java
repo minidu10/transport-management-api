@@ -27,6 +27,16 @@ public class AuthService {
         return "User registered successfully";
     }
 
+    public String registerAdmin(AppUser user) {
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole("ADMIN");
+
+        userRepository.save(user);
+
+        return "Admin registered successfully";
+    }
+
     public String login(String username, String password) {
 
     AppUser user = userRepository.findByUsername(username)

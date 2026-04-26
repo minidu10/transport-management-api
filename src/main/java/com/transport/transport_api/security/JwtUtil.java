@@ -3,6 +3,7 @@ package com.transport.transport_api.security;
 import java.security.Key;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.JwtException;
@@ -13,9 +14,14 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtUtil {
 
-    private final String SECRET = "mysecretkeymysecretkeymysecretkey12345";
+    private final Key key;
+    private final long expirationMs;
 
-    private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
+    public JwtUtil(@Value("${jwt.secret}") String secret,
+                   @Value("${jwt.expiration-ms}") long expirationMs) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        this.expirationMs = expirationMs;
+    }
 
     public String generateToken(String username, String role) {
 
@@ -23,7 +29,7 @@ public class JwtUtil {
             .setSubject(username)
             .claim("role", role)
             .setIssuedAt(new Date())
-            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+            .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
             .signWith(key, SignatureAlgorithm.HS256)
             .compact();
 }
